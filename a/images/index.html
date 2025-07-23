@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>タイトル</title>
+
+<!-- フォント -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=WDXL+Lubrifont+JP+N&display=swap" rel="stylesheet" />
+
+<style>
+:root {
+--title-color: Black;
+--text-color: #333333;
+--sabu-color: #555;
+--menu-bg-color: #333333;
+--menu-text-color: #ffffff;
+}
+/* タイトル */
+.parallax-text {
+color: var(--title-color);
+font-size: 3rem;
+line-height: 1.2;
+}
+.parallax-subtext {
+font-size: 1.2rem;
+margin-top: 0em;
+color: var(--sabu-color);
+}    
+.normal-text{
+font-size: 1.2rem;
+margin-top: 0em;
+font-size: 1.5rem;
+line-height: 1.6;
+color: #333;
+margin-top: 1rem;
+white-space: pre-wrap;
+color: var(--text-color);
+}
+    
+/* テキストグループ */
+.parallax-text-group {
+display: flex;
+flex-direction: column;
+align-items: center;
+width: 100%;
+}
+
+ </style>
+
+<style>/*メニュー*/
+.menu-button {
+background-color: var(--menu-bg-color);
+color: var(--menu-text-color);
+}
+
+.side-menu {
+background-color: var(--menu-bg-color);
+color: var(--menu-text-color);
+}
+
+.side-menu li:hover {
+background-color: var(--menu-bg-color);
+color: var(--menu-text-color);
+}
+</style>
+
+    
+<style>/*サイズにより変更*/
+.image-text-wrapper {
+display: flex;
+flex-direction: row; /* デフォルトは横並び */
+gap: 1.5em;
+align-items: flex-start;
+justify-content: center;
+flex-wrap: wrap;
+}
+/* ウィンドウが600px以下なら縦並びにする */
+@media (max-width: 600px) {
+.image-text-wrapper {
+flex-direction: column;     /* 縦並びに変更 */
+align-items: center;
+}
+
+.modal-image,
+.modal-description {
+width: 90%;
+max-width: 100%;
+text-align: center;
+}
+}
+
+
+/* 基本リセット */
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+body {
+font-family: "WDXL Lubrifont JP N", sans-serif;
+overflow-x: hidden;
+background-color: #ffffff;
+}
+</style>
+
+<style>
+/* メニューボタン */
+.menu-button {
+position: fixed;
+top: -5px;
+left: -5px;
+background-color: #333;
+color: white;
+border: none;
+font-size: 3rem;
+padding: 0.1em 0.4em;
+border-radius: 8px;
+cursor: pointer;
+z-index: 1000;
+}
+
+/* スライドインメニュー */
+.side-menu {
+position: fixed;
+top: 0;
+left: -220px;
+width: 200px;
+height: 100%;
+background-color: #222;
+color: white;
+padding-top: 60px;
+transition: left 0.3s ease;
+z-index: 1000;
+}
+.side-menu.open {
+left: 0;
+}
+.side-menu ul {
+list-style: none;
+padding: 0;
+margin: 0;
+}
+.side-menu li {
+padding: 15px 20px;
+border-bottom: 1px solid #444;
+cursor: pointer;
+transition: 0.5s;
+}
+.side-menu li:hover {
+background-color: #333;
+color: #fff;
+font-size: 16px;
+font-weight: bold;
+padding: 18px 45px;
+border-radius: 6px;
+transition: 0.5s;
+}
+    
+    
+</style>
+
+
+
+<style>
+/* セクション */
+section {
+position: relative;
+overflow: visible; /* autoからvisibleに変更 */
+min-height: 100vh; /* 最低でも画面高さ */
+padding: 40px 20px;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+background: linear-gradient(to bottom right, #ffdee9, #b5fffc);
+transition: background 0.3s ease;
+}
+section:nth-child(even) {
+background: linear-gradient(to bottom right, #b5fffc, #ffdee9);
+}
+
+/* 背景 */
+.background {
+position: relative; z-index: 0;
+position: absolute;
+inset: 0;
+width: 100%;
+height: 100%;
+background-image: linear-gradient(135deg, #ffdee9, #b5fffc);
+background-repeat: no-repeat;
+pointer-events: none;
+background-size: contain;
+}
+
+.scroll-reactive {
+display: inline-block;
+}
+
+
+
+
+/* 浮遊アニメーション */
+.floating {
+display: block; /* ← ここを inline-block から block に変える */
+width: 100%;
+animation: gentle-float 5s ease-in-out infinite;
+}
+
+@keyframes gentle-float {
+0%   { transform: translateY(0); }
+50%  { transform: translateY(-10px); }
+100% { transform: translateY(0); }
+}
+
+/* 仕切り */
+.loop-divider {
+position: relative;
+width: 100%;
+overflow: hidden;
+white-space: nowrap;
+border-top: 2px solid #ccc;
+border-bottom: 2px solid #ccc;
+background-color: #ffffff;
+padding: 10px 0;
+z-index: 5;
+}
+
+.scrolling-text {
+display: inline-block;
+animation: scroll-text 40s linear infinite;
+font-size: 1rem;
+color: #180614;
+letter-spacing: 0.5em;
+z-index: 5;
+margin-right: 2em;
+}
+
+@keyframes scroll-text {
+0% { transform: translateX(0); }
+100% { transform: translateX(-80%); }
+}
+
+/* 画像 */
+.b {
+margin-top: 20px;
+width: min(40vw, 300px);
+border-radius: 8px;
+animation: gentle-float 5s ease-in-out infinite;
+max-width: 90%;
+height: auto;
+cursor: pointer;
+z-index: 1;
+display: block;
+margin-left: auto;
+margin-right: auto;
+}
+.parallax-text-group .b {
+display: inline-block;
+margin: 10px;
+}
+
+/* 画像を囲む親要素にflex適用（構造そのままでOK） */
+.parallax-text-group {
+display: flex;
+flex-direction: row;
+flex-wrap: wrap;
+justify-content: center;
+gap: 1.5em;
+}
+
+/* スマホ表示で縦並び */
+@media (max-width: 600px) {
+.parallax-text-group {
+flex-direction: column;
+align-items: center;
+}
+}
+
+
+
+/* モーダル */
+.modal {
+display: none;
+position: fixed;
+z-index: 2000;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+overflow: auto;
+background-color: rgba(0,0,0,0.6);
+align-items: center;     /* ↓ ここで縦方向中央揃え */
+justify-content: center;   /* 水平方向：中央揃え */
+position: fixed;
+z-index: 2000;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0,0,0,0.6);
+}
+  
+.modal-content {
+background-color: #fff;
+margin: 10% auto;
+padding: 30px;
+border: 1px solid #888;
+width: 50%;
+max-width: 600px;
+border-radius: 10px;
+position: relative;
+text-align: center;
+margin-left: auto;
+margin-right: auto;
+}
+
+
+:root {
+--close: #orange;
+--close-hover: #orange;
+}
+
+.close {
+color: var(--close);
+position: absolute;
+top: 10px;
+right: 15px;
+font-size: 30px;
+font-weight: bold;
+cursor: pointer;
+
+}
+
+.close:hover {
+color: var(--close-hover);
+}
+
+.parallax-text,
+.parallax-subtext,
+.normal-text {
+word-wrap: break-word;
+white-space: normal;
+text-align: center;
+width: 90%;
+max-width: 800px;
+}
+
+
+
+/* ✅ モーダル中央に配置、サイズが画面に応じて縮小 */
+.modal-content {
+background-color: #fff;
+padding: 20px;
+border-radius: 10px;
+display: flex;
+flex-direction: column;
+width: 80vw;           /* ← 幅を固定 or 大きめに */
+max-width: 800px;      /* ← 最大幅の制限 */
+min-width: 300px;      /* ← 最低でもこの幅は欲しい */
+max-height: 90vh;
+overflow: auto;
+margin: auto;
+box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* ✅ 画像とテキストを横並び、縮めて対応 */
+.image-text-wrapper {
+display: flex;
+flex-direction: row;
+gap: 1.5em;
+align-items: flex-start;
+justify-content: center;
+}
+
+@media (max-width: 600px) {
+.image-text-wrapper {
+flex-direction: column;
+flex-wrap: wrap; /* ✅ これでOK！ */
+align-items: center;
+}
+}
+
+/* ✅ 画像 */
+.modal-image {
+width: 40%;
+max-width: 200px;
+height: auto;
+border-radius: 10px;
+flex-shrink: 0;
+}
+
+/* ✅ テキスト：横幅に合わせて改行される */
+.modal-description {
+width: 50%;
+color: #333;
+font-size: 1rem;
+line-height: 1.5;
+word-wrap: break-word;
+white-space: normal;
+}
+
+/* ✅ 閉じるボタン */
+.close {
+position: absolute;
+top: 10px;
+right: 15px;
+font-size: 30px;
+color: #aaa;
+cursor: pointer;
+}
+.close:hover {
+color: #000;
+}
+
+/* ✅ 小さい画面ではモーダル自体を縮めて対応（下に落とさない） */
+@media (max-width: 600px) {
+.modal-content {
+width: 90vw;
+padding: 15px;
+}
+
+.modal-image {
+width: 35%;
+max-width: 120px;
+}
+
+.modal-description {
+width: 55%;
+font-size: 0.9rem;
+}
+}
+
+    
+    
+    
+
+
+
+
+/* From Uiverse.io by Madflows */ 
+a {
+ position: relative;
+ display: inline-block;
+ cursor: pointer;
+ outline: none;
+ border: 0;
+ vertical-align: middle;
+ text-decoration: none;
+ font-family: inherit;
+ font-size: 15px;
+}
+
+a.learn-more {
+    
+ font-weight: 600;
+ color: #382b22;
+ text-transform: uppercase;
+ padding: 1.25em 2em;
+ background: #fff0f0;
+ border: 2px solid #b18597;
+ border-radius: 0.75em;
+ -webkit-transform-style: preserve-3d;
+ transform-style: preserve-3d;
+ -webkit-transition: background 150ms cubic-bezier(0, 0, 0.58, 1), -webkit-transform 150ms cubic-bezier(0, 0, 0.58, 1);
+ transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), background 150ms cubic-bezier(0, 0, 0.58, 1), -webkit-transform 150ms cubic-bezier(0, 0, 0.58, 1);
+}
+
+a.learn-more::before {
+ position: absolute;
+ content: '';
+ width: 100%;
+ height: 100%;
+ top: 0;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ background: #f9c4d2;
+ border-radius: inherit;
+ -webkit-box-shadow: 0 0 0 2px #b18597, 0 0.625em 0 0 #ffe3e2;
+ box-shadow: 0 0 0 2px #b18597, 0 0.625em 0 0 #ffe3e2;
+ -webkit-transform: translate3d(0, 0.75em, -1em);
+ transform: translate3d(0, 0.75em, -1em);
+ transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), box-shadow 150ms cubic-bezier(0, 0, 0.58, 1), -webkit-transform 150ms cubic-bezier(0, 0, 0.58, 1), -webkit-box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
+}
+
+a.learn-more:hover {
+ background: #ffe9e9;
+ -webkit-transform: translate(0, 0.25em);
+ transform: translate(0, 0.25em);
+}
+
+a.learn-more:hover::before {
+ -webkit-box-shadow: 0 0 0 2px #b18597, 0 0.5em 0 0 #ffe3e2;
+ box-shadow: 0 0 0 2px #b18597, 0 0.5em 0 0 #ffe3e2;
+ -webkit-transform: translate3d(0, 0.5em, -1em);
+ transform: translate3d(0, 0.5em, -1em);
+}
+
+a.learn-more:active {
+ background: #ffe9e9;
+ -webkit-transform: translate(0em, 0.75em);
+ transform: translate(0em, 0.75em);
+}
+
+a.learn-more:active::before {
+ -webkit-box-shadow: 0 0 0 2px #b18597, 0 0 #ffe3e2;
+ box-shadow: 0 0 0 2px #b18597, 0 0 #ffe3e2;
+ -webkit-transform: translate3d(0, 0, -1em);
+ transform: translate3d(0, 0, -1em);
+}
+   .learn-more .btn-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.learn-more svg {
+  width: 1.2em;
+  height: 1.2em;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+ .learn-more span {
+  position: relative;
+  top: -0px; /* 1～3pxあたりで調整してみて！ */
+}
+.learn-more {
+  display: block;
+  margin-top: 1em; /* 必要なら上下に余白も */
+}
+
+</style>
+</head>
+
+
+<body>
+<!-- ✅ 1つ目のセクション -->
+<section id="1">
+<div class="background"></div>
+<div class="parallax-text-group">
+
+<p class="parallax-text scroll-reactive floating">
+こんばんにちわ</p>
+<p class="parallax-subtext scroll-reactive floating">
+砂糖おいしいのアカウントとか乗っけてます</p>
+<p class="normal-text floating">すごくね？これ自作なんですよ？？</p>
+</div>
+    
+<!-- これ1個だけでOK -->
+<a href="https://x.gd/DRzQg" class="learn-more" target="_blank" rel="noopener noreferrer">
+  <span class="btn-content">
+    <svg xmlns="http://www.w3.org/2000/svg" id="x" viewBox="0 0 24 24">
+      <path d="m15.5,10v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h-3v1h-1v1h-1v1h-1v1h-1v1h-1v1h-2v-1h-1v-1h-1v-2h-1v-1h-1v-1H1.5v1h1v1h1v1h1v2h1v1h1v2h1v1h1v2h1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h3v-1h1v-1h1v-1h1v-1h1v-1h1v-1h2v1h1v1h1v2h1v1h1v1h7v-1h-1v-1h-1v-1h-1v-2h-1v-1h-1v-2h-1v-1h-1v-2h-1v-1h1Zm0,4v1h1v2h1v1h1v2h-3v-2h-1v-1h-1v-1h-1v-2h-1v-1h-1v-1h-1v-2h-1v-1h-1v-2h-1v-1h-1v-2h3v1h1v2h1v1h1v2h1v1h1v1h1v2h1Z"></path>
+    </svg>
+    <span>ツイッター</span>
+  </span>
+</a>
+    /
+<a href="https://www.youtube.com/@%E7%A0%82%E7%B3%96_yummy" class="learn-more" target="_blank" rel="noopener noreferrer">
+  <span class="btn-content">
+<img width=25 src="https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_youtube_3.png">
+    <span>YouTube</span>
+  </span>
+</a>
+    ・
+<a href="https://www.nicovideo.jp/user/134002440" class="learn-more" target="_blank" rel="noopener noreferrer">
+  <span class="btn-content">
+<img width=23 src="https://blog.nicovideo.jp/niconews/wp-content/uploads/2023/02/202302_televi-chan.png">
+    <span>YouTube</span>
+  </span>
+</a>
+
+</section>
+
+<!-- ✅ 仕切り -->
+<div class="loop-divider">
+<div class="scrolling-text">
+◆　　　◆　　　◆　　　◆　　　◆　　　◆　　　◆　　　◆　　　◆　　　◆　　　◆　　　◆　　　◆　　　◆　　　◆　　　◆　　　◆　　　◆　　　</div>
+</div>
+
+<!-- ✅ 2つ目のセクション -->
+<section id="2">
+<div class="background"></div>
+<div class="parallax-text-group">
+<p class="parallax-text scroll-reactive floating">
+タイトル</p>
+<p class="parallax-subtext scroll-reactive floating">
+ぱ</p>
+<p class="normal-text floating">ここに記入</p>
+
+<img class="b" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg5mUgrPY21sib6L8Hj1A7l3xTy7uBIrCwtQBFWoZB2TT2xDcTeC8nfJG6hoirMy_4zN0Hdb-DTFQFR_U4pJDFB_iXPFfnO86eNsDlfcGnKyTp7a_HE3v3FWvFmSiD6L_amVsFd4-W8J2aBJK0h5Ym8_PFu5_7XMNMRl1pyK8BsmjHdgpKpEYXVj7nHk3ax/s400/asobu_cat_shadow.png" alt="背景画像" data-description="
+画像説明用てきすと これめっさすき">
+
+</div>
+</section>
+
+
+<!-- 左上ボタン -->
+<button class="menu-button" onclick="toggleMenu()">≡</button>
+<!-- 左から出てくるメニュー -->
+<nav class="side-menu" id="sideMenu">
+<ul>
+<li onclick="scrollToSection('1')">トップ</li>
+<li onclick="scrollToSection('2')">なんか</li>
+</ul>
+</nav>
+
+
+
+<!-- ✅ お問い合わせ -->
+<div class="loop-divider">
+<div class="parallax-text-group">
+<div class="hoka-text">著作権とか知らんし</div>
+</div>
+
+
+<!-- ✅ JSでスクロール処理 -->
+<script>
+function scrollToSection(id) {
+const target = document.getElementById(id);
+if (target) {
+target.scrollIntoView({ behavior: 'smooth' });
+}
+}
+function toggleMenu() {
+document.getElementById('sideMenu').classList.toggle('open');
+}
+
+// タブ以外のクリックで閉じる
+document.addEventListener('click', function (event) {
+const menu = document.getElementById('sideMenu');
+const button = document.querySelector('.menu-button');
+
+// メニューでもボタンでもなければ閉じる
+if (!menu.contains(event.target) && !button.contains(event.target)) {
+menu.classList.remove('open');
+}
+});
+
+// ✅ モーダル開閉処理
+function openModal() {
+document.getElementById('imageModal').style.display = "flex";
+}
+
+
+// モーダル外クリックで閉じる
+window.addEventListener('click', function(event) {
+const modal = document.getElementById('imageModal');
+if (event.target === modal) {
+closeModal();
+}
+});
+
+</script>
+<!-- ✅ モーダル構造 -->
+<div id="imageModal" class="modal">
+<div class="modal-content">
+<span class="close" onclick="closeModal()">&times;</span>
+<div class="image-text-wrapper">
+<img id="modalImage" class="modal-image" src="css/" alt="拡大画像">
+<p id="modalDescription" class="modal-description"></p>
+</div>
+</div>
+</div>
+  
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+// モーダルを開く処理
+document.querySelectorAll('.b').forEach(img => {
+img.addEventListener('click', () => {
+const src = img.getAttribute('src');
+const desc = img.getAttribute('data-description');
+
+document.getElementById('modalImage').src = src;
+document.getElementById('modalDescription').textContent = desc;
+
+document.getElementById('imageModal').style.display = 'flex';
+});
+});
+
+// 閉じる処理
+function closeModal() {
+document.getElementById('imageModal').style.display = 'none';
+}
+
+// 閉じるボタン（×）クリック
+document.querySelectorAll('.close').forEach(btn => {
+btn.addEventListener('click', closeModal);
+});
+
+// モーダルの外側クリックで閉じる
+window.addEventListener('click', function(event) {
+const modal = document.getElementById('imageModal');
+if (event.target === modal) {
+closeModal();
+}
+});
+});
+</script>
+  </div>
+  </body>
+</html>
