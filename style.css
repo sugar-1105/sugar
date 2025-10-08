@@ -1,0 +1,235 @@
+section {
+  width: min(50%); /* ← 画面の90%か800px、狭い方を採用 */
+  margin: 7rem auto;
+  padding: 2.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 1.2rem;
+  box-shadow: 0 6px 25px rgba(213, 122, 163, 0.15);
+  backdrop-filter: blur(8px);
+  transition: 0.3s ease;
+  opacity: 1;
+  transform: none;
+}
+
+
+
+/* もこもこ背景 */
+.mofu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(circle at 20% 20%, #fff7fa 0%, transparent 70%),
+              radial-gradient(circle at 80% 40%, #ffeaf0 0%, transparent 70%),
+              radial-gradient(circle at 40% 80%, #fff 0%, transparent 70%);
+  animation: mofuMove 20s ease-in-out infinite alternate;
+
+}
+
+/* 🎵ボタン削除 → CSSも削除可 */
+
+/* 全体をもこもこの上に出す */
+.content,
+section,
+header {
+  position: relative;
+}
+
+
+/* スクロールしたときにふわっと出てくる */
+section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* タイトル文字をもっとくっきり */
+h1 {
+  font-size: 2.8rem;
+  color: #c45a88;
+  text-shadow: 0 0 6px rgba(255,255,255,0.8);
+}
+
+/* セクションタイトルも見えやすく */
+h2 {
+  color: #c45a88;
+  text-shadow: 0 0 5px rgba(255,255,255,0.7);
+z-index: 100000;
+}
+
+/* 本文文字を濃くする */
+section p, .content p {
+  color: #4a3f3f;
+  font-weight: 500;
+}
+
+/* 背景ちょい濃いめに */
+section {
+  background: rgba(255,255,255,0.95);
+}
+
+
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Zen Maru Gothic", sans-serif;
+  color: #5c4a4a;
+  background: #fff;
+  overflow-x: hidden;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(255,255,255,0.85);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  z-index: 100;
+  backdrop-filter: blur(5px);
+}
+
+.navbar ul {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: 0.8rem 0;
+}
+
+.navbar a {
+  color: #d57aa3;
+  text-decoration: none;
+  margin: 0 1rem;
+  transition: 0.3s;
+}
+
+.navbar a:hover, .navbar a.active {
+  color: #ffbcd1;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  margin-top: 60px;
+  position: relative;
+  z-index: 1;
+}
+
+p {
+  color: #7c6b6b;
+}
+
+.sns-links {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.sns-btn {
+  background: #ffeaf0;
+  color: #d57aa3;
+  padding: 0.6rem 1.2rem;
+  border-radius: 25px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.sns-btn:hover {
+  background: #ffdce8;
+  transform: scale(1.05);
+}
+
+.bgm-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #ffeaf0;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: 0.3s;
+}
+.bgm-toggle:hover {
+  background: #ffdce8;
+  transform: scale(1.1);
+}
+
+
+
+@keyframes mofuMove {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(-3%, -3%) scale(1.05);
+  }
+}
+
+/* 🌸 カスタムアラートウィンドウ */
+.alert-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  background: #fffafb;
+  border: 2px solid #ffd5e1;
+  border-radius: 1rem;
+  box-shadow: 0 8px 25px rgba(213, 122, 163, 0.2);
+  text-align: center;
+  padding: 2rem 2.5rem;
+  width: 85%;
+  max-width: 320px;
+  opacity: 0;
+  z-index: 999;
+  transition: all 0.25s ease;
+  font-family: "Zen Maru Gothic", sans-serif;
+}
+
+.alert-box.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.alert-box h3 {
+  color: #d57aa3;
+  font-size: 1.3rem;
+  margin-bottom: 0.8rem;
+}
+
+.alert-box p {
+  color: #7c6b6b;
+  font-size: 0.95rem;
+  margin-bottom: 1.4rem;
+  line-height: 1.6;
+}
+
+.alert-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.alert-btn {
+  background: #ffeaf0;
+  border: none;
+  border-radius: 1.5rem;
+  padding: 0.5rem 1.3rem;
+  color: #d57aa3;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.alert-btn:hover {
+  background: #ffdce8;
+  transform: scale(1.05);
+}
